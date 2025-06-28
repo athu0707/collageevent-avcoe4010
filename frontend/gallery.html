@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Gallery</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #1a1a2e;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #16213e;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+    }
+    #gallery-controls {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #gallery-controls input,
+    #gallery-controls select {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+    #gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .gallery-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .gallery-card:hover {
+      transform: scale(1.05);
+    }
+    .gallery-card img {
+      max-width: 100%;
+      border-radius: 10px;
+      height: 180px;
+      object-fit: cover;
+    }
+    .gallery-card h3 {
+      margin: 0.5rem 0 0;
+      color: #ffd369;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📸 Event Photo Gallery</h1>
+  </header>
+
+  <!-- 🔍 Search + Filter -->
+  <div id="gallery-controls">
+    <input type="text" id="searchBox" placeholder="🔍 Search event name...">
+    <select id="yearFilter">
+      <option value="">📅 Filter by year</option>
+      <option value="2025">2025</option>
+      <option value="2024">2024</option>
+      <option value="2023">2023</option>
+    </select>
+  </div>
+
+  <!-- Gallery Grid -->
+  <div id="gallery-container">
+    <!-- Event cards will be injected here -->
+  </div>
+
+  <script>
+    let allEvents = [];
+
+    async function loadGallery() {
+      const res = await fetch('http://localhost:3000/api/events');
+      allEvents = await res.json();
+      displayEvents(allEvents);
+    }
+
+    function displayEvents(events) {
+      const container = document.getElementById('gallery-container');
+      container.innerHTML = '';
+
+      if (events.length === 0) {
+        container.innerHTML = "<p style='color:white;'>No events found.</p>";
+        return;
+      }
+
+      events.forEach(event => {
+        if (event.image) {
+          const card = document.createElement('div');
+          card.className = 'gallery-card';
+          card.innerHTML = `
+            <img src="${event.image}" alt="${event.name}">
+            <h3>${event.name}</h3>
+            <p>${new Date(event.date).toLocaleDateString()}</p>
+          `;
+          container.appendChild(card);
+        }
+      });
+    }
+
+    function applyFilters() {
+      const searchValue = document.getElementById('searchBox').value.toLowerCase();
+      const yearValue = document.getElementById('yearFilter').value;
+
+      const filtered = allEvents.filter(event => {
+        const matchName = event.name.toLowerCase().includes(searchValue);
+        const matchYear = yearValue ? new Date(event.date).getFullYear().toString() === yearValue : true;
+        return matchName && matchYear;
+      });
+
+      displayEvents(filtered);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('searchBox').addEventListener('input', applyFilters);
+      document.getElementById('yearFilter').addEventListener('change', applyFilters);
+      loadGallery();
+    });
+  </script>
+</body>
+</html>

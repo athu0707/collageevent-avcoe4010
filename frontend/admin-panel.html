@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: brightness(0.75) blur(2px);
+      z-index: -1;
+    }
+
+    header {
+      background: rgba(58, 28, 113, 0.9);
+      color: #fff;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    nav a {
+      margin-left: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      padding: 2rem;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .admin-options {
+      display: grid;
+      gap: 1.5rem;
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+
+    .option-button {
+      padding: 1rem;
+      font-size: 1.1rem;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      border: none;
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: block;
+    }
+
+    .option-button:hover {
+      background: linear-gradient(to right, #43cea2, #185a9d);
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+    <nav>
+      <a href="index.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
+      <a href="students.html"><i class="fas fa-users"></i> Students</a>
+      <a href="admin.html"><i class="fas fa-lock"></i> Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2 style="text-align:center;">👋 Welcome Admin, choose an action:</h2>
+
+    <div class="admin-options">
+      <a href="event-form.html" class="option-button"><i class="fas fa-envelope"></i> Create Event & Send Email</a>
+      <a href="event-image-upload.html" class="option-button"><i class="fas fa-image"></i> Upload Event Image</a>
+      <a href="add-student.html" class="option-button"><i class="fas fa-user-plus"></i> Add New Student</a>
+      <a href="students.html" class="option-button"><i class="fas fa-users"></i> View Students</a>
+      <a href="gallery.html" class="option-button"><i class="fas fa-photo-video"></i> View Event Gallery</a>
+    </div>
+  </main>
+</body>
+
+</html>

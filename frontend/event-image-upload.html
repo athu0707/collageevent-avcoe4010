@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Event Image</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #141e30, #243b55);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      background: #00c9ff;
+      background: linear-gradient(to right, #92fe9d, #00c9ff);
+      padding: 10px 20px;
+      border: none;
+      color: black;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📸 Upload Event Image</h1>
+  <form id="uploadImageForm">
+    <label for="eventId">Event ID:</label>
+    <input type="text" id="eventId" required placeholder="Paste Event ID here" />
+
+    <label for="image">Select Event Image:</label>
+    <input type="file" id="image" accept="image/*" required />
+
+    <button type="submit">Upload Image</button>
+  </form>
+  <script>
+  // Autofill Event ID from localStorage if available
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedId = localStorage.getItem('lastEventId');
+    if (savedId) {
+      document.getElementById('eventId').value = savedId;
+    }
+  });
+</script>
+
+
+  <script>
+    document.getElementById('uploadImageForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const eventId = document.getElementById('eventId').value.trim();
+      const imageFile = document.getElementById('image').files[0];
+
+      if (!eventId || !imageFile) {
+        alert("Please enter Event ID and select an image.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+      try {
+        const res = await fetch(`http://localhost:3000/api/events/${eventId}/image`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          alert("✅ Image uploaded successfully!");
+        } else {
+          alert("❌ " + (result.error || "Image upload failed"));
+        }
+      } catch (err) {
+        console.error("❌ Error uploading image:", err);
+        alert("Error uploading image. Check console for details.");
+      }
+    });
+  </script>
+
+</body>
+</html>

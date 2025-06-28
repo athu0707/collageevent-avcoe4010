@@ -1,0 +1,69 @@
+<!-- ✅ Updated event-form.html (with auto-copy Event ID) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Event & Send Email</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+    }
+    input, textarea, button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      max-width: 500px;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📧 Create Event & Send Email</h1>
+  <form id="eventForm">
+    <input type="text" id="name" placeholder="Event Name" required />
+    <input type="date" id="date" required />
+    <textarea id="description" placeholder="Event Description" required></textarea>
+    <input type="email" id="email" placeholder="Recipient Email" required />
+    <button type="submit">Send Email & Save Event</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('eventForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const date = document.getElementById('date').value;
+      const description = document.getElementById('description').value;
+      const email = document.getElementById('email').value;
+
+      const response = await fetch('http://localhost:3000/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, date, description, email })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // ✅ Save to localStorage
+        localStorage.setItem("lastEventId", data.eventId);
+
+        // ✅ Copy to clipboard
+        navigator.clipboard.writeText(data.eventId);
+
+        document.getElementById("status").innerHTML =
+          `✅ Event created!<br> Event ID: <code>${data.eventId}</code> (copied to clipboard)`;
+        document.getElementById("eventForm").reset();
+      } else {
+        document.getElementById("status").textContent = "❌ Failed to save event.";
+      }
+    });
+  </script>
+</body>
+</html>
